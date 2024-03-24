@@ -29,8 +29,8 @@ import com.reyaz.gaonbazar.model.Category
 fun CategoryItem(category: Category, onClick: () -> Unit) {
     Card(
         modifier = Modifier
-            .padding(4.dp)
-            .border(2.dp, Color.Red, RoundedCornerShape(10.dp)),
+            .padding(8.dp)
+           /* .border(2.dp, Color.Red, RoundedCornerShape(10.dp))*/,
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
