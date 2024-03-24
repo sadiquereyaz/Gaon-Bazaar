@@ -1,7 +1,10 @@
 package com.reyaz.gaonbazar.screens
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,20 +29,23 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
+import kotlin.math.log
 
 @Composable
-fun CategoryScreen(
-    navController: NavController
+fun  CategoryScreen(
+   navController:NavController
 ) {
     val categories by getCategories().observeAsState(initial = emptyList())
-
+    val mcontext = LocalContext.current
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = Modifier.padding(16.dp)
     ) {
         items(categories) { category ->
             CategoryItem(category = category) {
-                navController.navigate("items/${category.id}")
+                Toast.makeText(mcontext, "before", Toast.LENGTH_SHORT).show()
+                navController.navigate("items_screen")
+                Toast.makeText(mcontext, "after", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -51,6 +57,7 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
+            .clickable { onClick() }
             .border(2.dp, color = Color.Red, RectangleShape)
             .padding(8.dp)
             .fillMaxWidth()
@@ -63,6 +70,7 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
             modifier = Modifier
                 .size(100.dp)
                 .padding(8.dp)
+
         )
         Text(
             text = category.name,
@@ -111,7 +119,7 @@ fun getItemsForCategory(categoryId: String): LiveData<List<Item>> {
     return MutableLiveData(dummyItemList)
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun CategoryScreenPreview() {
     val navController = rememberNavController()
