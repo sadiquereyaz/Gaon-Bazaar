@@ -22,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.reyaz.gaonbazar.model.Category
 
@@ -42,18 +43,22 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
                 .padding(8.dp)
         ) {
             Image(
+
                 painter = rememberAsyncImagePainter(category.imageUrl),
                 contentDescription = category.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(100.dp)
+                    .size(120.dp)
                     .padding(8.dp)
-                    .clip(shape = CircleShape),
+                    .clip(shape = CircleShape)
+                    .border(width = 2.dp,shape = CircleShape,color = Color.Red),
             )
             Text(
+                modifier = Modifier.padding(vertical = 2.dp),
                 text = category.name,
                 style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontSize = 24.sp
             )
         }
     }
