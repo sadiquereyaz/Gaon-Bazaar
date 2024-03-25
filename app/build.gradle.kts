@@ -75,4 +75,14 @@ dependencies {
 
     implementation (libs.androidx.runtime.livedata)
 
+    val room_version = "2.6.1"
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.room.compiler)
+    // To use Kotlin annotation processing tool (kapt)
+//    kapt(libs.androidx.room.room.compiler)
+    // To use Kotlin Symbol Processing (KSP)
+//    ksp(libs.androidx.room.room.compiler)
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation(libs.androidx.room.ktx)
+
 }

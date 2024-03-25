@@ -3,10 +3,12 @@ package com.reyaz.gaonbazar.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +30,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
@@ -50,7 +51,7 @@ fun CategoryScreen(
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                  Image(
                      modifier = Modifier.size(60.dp).padding(start = 16.dp),
-                     painter = painterResource(R.drawable.cropped),
+                     painter = painterResource(R.drawable.logo),
                      contentScale = ContentScale.Crop,
                      contentDescription = null,
                      colorFilter = ColorFilter.tint(Color.White)
