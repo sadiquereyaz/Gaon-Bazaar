@@ -6,6 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
+//import androidx.compose.foundation.layout.FlowColumnScopeInstance.align
+//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
+//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
 
 
 import androidx.compose.foundation.layout.Row
@@ -32,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.model.Item
@@ -59,6 +65,7 @@ fun ItemList( id:String?) {
 
     }
 
+
 //    LazyVerticalGrid(columns =GridCells.Fixed(2)) {
 //        items(getItemsForCategory(id!!)){
 //            itemViewCard(it)
@@ -67,6 +74,8 @@ fun ItemList( id:String?) {
 //    }
 
 }
+
+
 @Composable
 fun itemViewCard(item: Item) {
     Spacer(modifier = Modifier.height(8.dp))
@@ -106,63 +115,99 @@ fun itemViewCard(item: Item) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Spacer(modifier = Modifier.width(16.dp))
 
-                Column(modifier = Modifier.padding(3.dp)) {
+                Column(modifier = Modifier.padding(3.dp),
+                    verticalArrangement = Arrangement.SpaceAround) {
                     Text(
                         text = item.price.toString(),
-                        modifier = Modifier.align(Alignment.Start).padding(0.dp, 0.dp, 12.dp, 0.dp),
+                        modifier = Modifier
+                            .align(Alignment.Start)
+                            .padding(0.dp, 0.dp, 12.dp, 0.dp),
                         color = Color.Black,
                     )
 
-                    // Align the button to the bottom right
                     Box(
                         modifier = Modifier
+                            .align(Alignment.Start)
                             .fillMaxWidth()
-                            .padding(8.dp)
-                            .align(Alignment.End)
+
+
                     ) {
                         addButton()
                     }
+
                 }
+
             }
+
         }
     }
-}
-
-@Composable
+}@Composable
 fun addButton() {
     val isAdd = remember { mutableStateOf(false) }
     var counter = remember { mutableStateOf(0) }
+
     if (!isAdd.value) {
-        Button(onClick = {
-            isAdd.value = true
-            counter.value = 1
-        }) {
-            Text(text = "ADD")
+        Button(
+            onClick = {
+                isAdd.value = true
+                counter.value = 1
+            },
+            modifier = Modifier.size(100.dp, 40.dp)
+        ) {
+            Text(text = "ADD", fontSize = 15.sp)
         }
     } else {
-        if(counter.value == 0){
-            isAdd.value = false
-        }else{
-
-
+        if(counter.value != 0){
             Row(
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Bottom
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                SmallFloatingActionButton(onClick = { counter.value-- }) {
+                Button(
+                    onClick = { counter.value-- },
+                    modifier = Modifier.size(30.dp)
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.baseline_exposure_neg_1_24),
+                        modifier = Modifier.size(15.dp),
                         contentDescription = "decrement"
                     )
                 }
-                Text(text = "${counter.value}")
-                SmallFloatingActionButton(onClick = { counter.value++ }) {
+                Text(
+                    text = "${counter.value}",
+                    modifier = Modifier.size(20.dp),
+                    fontSize = 15.sp
+                )
+                Button(
+                    onClick = { counter.value++ },
+                    modifier = Modifier.size(30.dp)
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.baseline_plus_one_24),
+                        modifier = Modifier.size(15.dp),
                         contentDescription = "increment"
                     )
                 }
             }
+        }else{
+            isAdd.value = false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 }
