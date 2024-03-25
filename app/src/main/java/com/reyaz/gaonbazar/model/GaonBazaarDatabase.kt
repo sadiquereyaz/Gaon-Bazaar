@@ -19,7 +19,9 @@ abstract class GaonBazaarDatabase() : RoomDatabase() {
                         context.applicationContext,
                         GaonBazaarDatabase::class.java,
                         "gaon_bazaar_db"
-                    ).build()
+                    )
+                        .fallbackToDestructiveMigration()
+                        .build()
                 }
             }
             return DB_INSTANCE!!
