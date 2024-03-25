@@ -70,3 +70,4 @@ fun CategoryItemPreview() {
 
     CategoryItem(category = category) {}
 }
+
