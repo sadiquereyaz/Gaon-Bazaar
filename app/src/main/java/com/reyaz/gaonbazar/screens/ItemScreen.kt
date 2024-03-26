@@ -81,6 +81,9 @@ fun ItemList( id:String?) {
 
 @Composable
 fun itemViewCard(item: Item) {
+
+
+
     Spacer(modifier = Modifier.height(8.dp))
     Card(
         modifier = Modifier
@@ -102,7 +105,7 @@ fun itemViewCard(item: Item) {
                         .align(Alignment.CenterHorizontally)
                         .size(60.dp, 60.dp)
                         .clip(RoundedCornerShape(16.dp)),
-                    painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                    painter = painterResource(id = R.drawable.cropped),
                     alignment = Alignment.CenterStart,
                     contentDescription = "",
                     contentScale = ContentScale.Crop
