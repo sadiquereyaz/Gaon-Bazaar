@@ -1,5 +1,6 @@
 package com.reyaz.gaonbazar.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
+import com.reyaz.gaonbazar.model.Route
 
 @Composable
 fun CategoryScreen(
@@ -71,7 +74,9 @@ fun CategoryScreen(
         ) {
             items(categories) { category ->
                 CategoryItem(category = category) {
-                    navController.navigate("items/${category.id}")
+
+                    navController.navigate(Route.Item.route+"/${category.id}")
+
                 }
             }
         }

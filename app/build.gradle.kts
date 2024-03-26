@@ -50,6 +50,7 @@ android {
 }
 
 dependencies {
+    implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
