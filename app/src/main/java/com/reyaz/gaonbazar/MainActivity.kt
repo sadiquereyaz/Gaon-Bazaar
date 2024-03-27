@@ -14,6 +14,7 @@ import com.reyaz.gaonbazar.navigation.SetupNavigation
 import com.reyaz.gaonbazar.ui.theme.GaonBazarTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

@@ -50,7 +50,7 @@ fun CategoryScreen(
             Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                  Image(
                      modifier = Modifier.size(60.dp).padding(start = 16.dp),
-                     painter = painterResource(R.drawable.cropped),
+                     painter = painterResource(R.drawable.logo),
                      contentScale = ContentScale.Crop,
                      contentDescription = null,
                      colorFilter = ColorFilter.tint(Color.White)
