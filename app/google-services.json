@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "438509549800",
+    "project_id": "gaon-bazar",
+    "storage_bucket": "gaon-bazar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438509549800:android:6e3a05a2811299b532315d",
+        "android_client_info": {
+          "package_name": "com.reyaz.gaonbazar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGtftStP0MKZ5L1ZJRttVPfTsqNHkQG-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

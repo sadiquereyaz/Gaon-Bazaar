@@ -1,6 +1,6 @@
 package com.reyaz.gaonbazar.screens
 
-import android.widget.Toast
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,8 +15,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,10 +28,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
-import com.reyaz.gaonbazar.model.Route
+import com.reyaz.gaonbazar.R
 
 @Composable
 fun CategoryScreen(
@@ -45,20 +47,26 @@ fun CategoryScreen(
                 .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.CenterStart
         ) {
-            Row {
-                /* Image(
-                     painter = painterResource(id = R.drawable.logo),
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                 Image(
+                     modifier = Modifier.size(60.dp).padding(start = 16.dp),
+                     painter = painterResource(R.drawable.cropped),
+                     contentScale = ContentScale.Crop,
                      contentDescription = null,
-                     modifier = Modifier.size(24.dp)
-                 )*/
+                     colorFilter = ColorFilter.tint(Color.White)
+                 )
                 Text(
+                    modifier = Modifier.padding(16.dp),
                     text = "Gaon Bazaar",
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp
+                    fontSize = 40.sp,
+                    color = Color(MaterialTheme.colorScheme.onPrimary.toArgb())
                 )
             }
         }
+
+
          Text(
              text = "Categories",
              modifier = Modifier
@@ -69,14 +77,12 @@ fun CategoryScreen(
 
          )
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(2),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             items(categories) { category ->
                 CategoryItem(category = category) {
-
-                    navController.navigate(Route.Item.route+"/${category.id}")
-
+                    navController.navigate("items/${category.id}")
                 }
             }
         }
