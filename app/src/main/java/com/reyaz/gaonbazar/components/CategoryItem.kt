@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -64,15 +63,15 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CategoryItemPreview() {
-    val category = Category(
-        id = "1",
-        name = "Fruits",
-        imageUrl = "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
-    )
-
-    CategoryItem(category = category) {}
-}
-
+//@Preview(showBackground = true)
+//@Composable
+//fun CategoryItemPreview() {
+//    val category = Category(
+//        id = "1",
+//        name = "Fruits",
+//        imageUrl = "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
+//    )
+//
+//    CategoryItem(category = category) {}
+//}
+//

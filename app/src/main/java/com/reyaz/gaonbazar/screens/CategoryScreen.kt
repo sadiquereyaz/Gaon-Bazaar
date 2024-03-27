@@ -3,12 +3,10 @@ package com.reyaz.gaonbazar.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,17 +21,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
-import com.reyaz.gaonbazar.R
 
 @Composable
 fun CategoryScreen(
@@ -48,14 +48,19 @@ fun CategoryScreen(
                 .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.CenterStart
         ) {
-            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                 Image(
-                     modifier = Modifier.size(60.dp).padding(start = 16.dp),
-                     painter = painterResource(R.drawable.logo),
-                     contentScale = ContentScale.Crop,
-                     contentDescription = null,
-                     colorFilter = ColorFilter.tint(Color.White)
-                 )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(start = 16.dp),
+                    painter = painterResource(R.drawable.logo),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
                 Text(
                     modifier = Modifier.padding(16.dp),
                     text = "Gaon Bazaar",
@@ -68,15 +73,15 @@ fun CategoryScreen(
         }
 
 
-         Text(
-             text = "Categories",
-             modifier = Modifier
-                 .padding(top = 24.dp)
-                 .fillMaxWidth(),
-             fontSize = 24.sp,
-             textAlign = TextAlign.Center
+        Text(
+            text = "Categories",
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .fillMaxWidth(),
+            fontSize = 24.sp,
+            textAlign = TextAlign.Center
 
-         )
+        )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
@@ -101,24 +106,49 @@ fun ItemList(categoryId: String) {
 
 fun getCategories(): LiveData<List<Category>> {
     // Fetch categories from Firebase Firestore and return as LiveData
-    val dummyCategoryList = listOf(
-        Category(
-            "1",
-            "Fruits",
-            "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
-        ),
-        Category(
-            "2",
-            "Vegetables",
-            "https://i.ytimg.com/vi/xoOecJZ2Q-0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACQeTcHm87pM_okEDBQEXrLp7WDw"
-        ),
-        Category(
-            "3",
-            "Dairy",
-            "https://i.ytimg.com/vi/ktOWiLx83bQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEke-Q-UD1CAp8hwO-8rY_32bMXw"
-        )
-    )
-    return MutableLiveData(dummyCategoryList)
+    val firebaseDatabase = FirebaseDatabase.getInstance()
+    val categoryReference = firebaseDatabase.getReference("Category")
+    val categoriesLiveData = MutableLiveData<List<Category>>()
+
+    categoryReference.addValueEventListener(object : ValueEventListener{
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val categories = mutableListOf<Category>()
+            for (categorySnapshot in snapshot.children){
+
+                val name = categorySnapshot.key?:""
+                val id = categorySnapshot.child("id").getValue(Int::class.java)?:0
+                val imageUrl = categorySnapshot.child("imageUrl").getValue(String::class.java)?: ""
+                val category = Category(id, name, imageUrl)
+
+                categories.add(category)
+            }
+            categoriesLiveData.value = categories
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
+    return categoriesLiveData
+
+//    val dummyCategoryList = listOf(
+//        Category(
+//            "1",
+//            "Fruits",
+//            "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
+//        ),
+//        Category(
+//            "2",
+//            "Vegetables",
+//            "https://i.ytimg.com/vi/xoOecJZ2Q-0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACQeTcHm87pM_okEDBQEXrLp7WDw"
+//        ),
+//        Category(
+//            "3",
+//            "Dairy",
+//            "https://i.ytimg.com/vi/ktOWiLx83bQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEke-Q-UD1CAp8hwO-8rY_32bMXw"
+//        )
+//    )
+//    return MutableLiveData(dummyCategoryList)
 }
 
 fun getItemsForCategory(categoryId: String): LiveData<List<Item>> {
@@ -147,27 +177,27 @@ fun getItemsForCategory(categoryId: String): LiveData<List<Item>> {
     return MutableLiveData(dummyItemList)
 }
 
-@Preview(showSystemUi = true)
-@Composable
-fun CategoryScreenPreview() {
-    val navController = rememberNavController()
-    val categories = listOf(
-        Category(
-            "1",
-            "Fruits",
-            "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
-        ),
-        Category(
-            "2",
-            "Vegetables",
-            "https://i.ytimg.com/vi/xoOecJZ2Q-0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACQeTcHm87pM_okEDBQEXrLp7WDw"
-        ),
-        Category(
-            "3",
-            "Dairy",
-            "https://i.ytimg.com/vi/ktOWiLx83bQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEke-Q-UD1CAp8hwO-8rY_32bMXw"
-        )
-    )
-
-    CategoryScreen(navController = navController)
-}
+//@Preview(showSystemUi = true)
+//@Composable
+//fun CategoryScreenPreview() {
+//    val navController = rememberNavController()
+//    val categories = listOf(
+//        Category(
+//            "1",
+//            "Fruits",
+//            "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
+//        ),
+//        Category(
+//            "2",
+//            "Vegetables",
+//            "https://i.ytimg.com/vi/xoOecJZ2Q-0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACQeTcHm87pM_okEDBQEXrLp7WDw"
+//        ),
+//        Category(
+//            "3",
+//            "Dairy",
+//            "https://i.ytimg.com/vi/ktOWiLx83bQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEke-Q-UD1CAp8hwO-8rY_32bMXw"
+//        )
+//    )
+//
+//    CategoryScreen(navController = navController)
+//}
