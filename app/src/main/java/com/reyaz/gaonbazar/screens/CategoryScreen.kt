@@ -1,6 +1,6 @@
 package com.reyaz.gaonbazar.screens
 
-import android.widget.Toast
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,8 +15,9 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -27,16 +28,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImagePainter.State.Empty.painter
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
+import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.model.Route
+import com.reyaz.gaonbazar.model.writeCategory
 
 @Composable
 fun CategoryScreen(
     navController: NavController
 ) {
     val categories by getCategories().observeAsState(initial = emptyList())
+
 
     Column(Modifier.fillMaxWidth()) {
         Box(
@@ -45,20 +54,26 @@ fun CategoryScreen(
                 .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.CenterStart
         ) {
-            Row {
-                /* Image(
-                     painter = painterResource(id = R.drawable.logo),
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                 Image(
+                     modifier = Modifier.size(60.dp).padding(start = 16.dp),
+                     painter = painterResource(R.drawable.logo),
+                     contentScale = ContentScale.Crop,
                      contentDescription = null,
-                     modifier = Modifier.size(24.dp)
-                 )*/
+                     colorFilter = ColorFilter.tint(Color.White)
+                 )
                 Text(
+                    modifier = Modifier.padding(16.dp),
                     text = "Gaon Bazaar",
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp
+                    fontSize = 40.sp,
+                    color = Color(MaterialTheme.colorScheme.onPrimary.toArgb())
                 )
             }
         }
+
+
          Text(
              text = "Categories",
              modifier = Modifier
@@ -69,14 +84,12 @@ fun CategoryScreen(
 
          )
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(2),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
         ) {
             items(categories) { category ->
                 CategoryItem(category = category) {
-
                     navController.navigate(Route.Item.route+"/${category.id}")
-
                 }
             }
         }
@@ -93,7 +106,7 @@ fun ItemList(categoryId: String) {
 }
 
 fun getCategories(): LiveData<List<Category>> {
-    // Fetch categories from Firebase Firestore and return as LiveData
+
     val dummyCategoryList = listOf(
         Category(
             "1",
@@ -111,6 +124,7 @@ fun getCategories(): LiveData<List<Category>> {
             "https://i.ytimg.com/vi/ktOWiLx83bQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEke-Q-UD1CAp8hwO-8rY_32bMXw"
         )
     )
+    writeCategory(dummyCategoryList)
     return MutableLiveData(dummyCategoryList)
 }
 
@@ -164,3 +178,4 @@ fun CategoryScreenPreview() {
 
     CategoryScreen(navController = navController)
 }
+

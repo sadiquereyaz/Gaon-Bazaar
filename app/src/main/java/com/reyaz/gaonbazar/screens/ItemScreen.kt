@@ -56,11 +56,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.reyaz.gaonbazar.MainActivity
 import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.model.Item
-
+import com.reyaz.gaonbazar.model.readCategoryItem
 
 
 @Composable
 fun ItemList( id:String?) {
+   val readItem= readCategoryItem()
     var listItem = emptyList<Item>()
     getItemsForCategory(id!!).observe(LocalLifecycleOwner.current,{
         listItem = it;
@@ -105,7 +106,7 @@ fun itemViewCard(item: Item) {
                         .align(Alignment.CenterHorizontally)
                         .size(60.dp, 60.dp)
                         .clip(RoundedCornerShape(16.dp)),
-                    painter = painterResource(id = R.drawable.cropped),
+                    painter = painterResource(id = R.drawable.logo),
                     alignment = Alignment.CenterStart,
                     contentDescription = "",
                     contentScale = ContentScale.Crop
