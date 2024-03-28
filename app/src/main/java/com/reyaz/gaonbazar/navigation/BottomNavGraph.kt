@@ -6,12 +6,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.reyaz.gaonbazar.model.Constant.CATEGORY
+import com.reyaz.gaonbazar.model.Constant.ITEM
 import com.reyaz.gaonbazar.model.Constant.ORDER
 import com.reyaz.gaonbazar.model.Constant.SELLER
 import com.reyaz.gaonbazar.screens.CategoryScreen
+import com.reyaz.gaonbazar.screens.ItemList
 import com.reyaz.gaonbazar.screens.MainScreen
 import com.reyaz.gaonbazar.screens.OrderScreen
 import com.reyaz.gaonbazar.screens.SellerScreen
+import okhttp3.Route
 
 @Composable
 fun BottomNavGraph(
@@ -34,7 +37,11 @@ fun BottomNavGraph(
 
         }
         composable(route = SELLER) {
-           SellerScreen(navController = navController)
+            SellerScreen(navController = navController)
+        }
+        composable(route = "$ITEM/{name}") {
+            val name = it.arguments?.getString("name")
+            ItemList(name)
         }
     }
 }

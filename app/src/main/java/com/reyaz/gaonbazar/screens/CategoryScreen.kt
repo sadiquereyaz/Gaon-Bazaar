@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener
 import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
+import com.reyaz.gaonbazar.model.Constant.ITEM
 import com.reyaz.gaonbazar.model.Item
 
 @Composable
@@ -88,13 +89,11 @@ fun CategoryScreen(
         ) {
             items(categories) { category ->
                 CategoryItem(category = category) {
-                    navController.navigate("items/${category.id}")
+                    navController.navigate(ITEM+"/${category.name}")
                 }
             }
         }
     }
-
-
 }
 
 @Composable
@@ -130,25 +129,6 @@ fun getCategories(): LiveData<List<Category>> {
         }
     })
     return categoriesLiveData
-
-//    val dummyCategoryList = listOf(
-//        Category(
-//            "1",
-//            "Fruits",
-//            "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
-//        ),
-//        Category(
-//            "2",
-//            "Vegetables",
-//            "https://i.ytimg.com/vi/xoOecJZ2Q-0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACQeTcHm87pM_okEDBQEXrLp7WDw"
-//        ),
-//        Category(
-//            "3",
-//            "Dairy",
-//            "https://i.ytimg.com/vi/ktOWiLx83bQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEke-Q-UD1CAp8hwO-8rY_32bMXw"
-//        )
-//    )
-//    return MutableLiveData(dummyCategoryList)
 }
 
 fun getItemsForCategory(categoryId: String): LiveData<List<Item>> {

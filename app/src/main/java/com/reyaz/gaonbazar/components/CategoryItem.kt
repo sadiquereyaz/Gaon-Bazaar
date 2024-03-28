@@ -2,6 +2,7 @@ package com.reyaz.gaonbazar.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ fun CategoryItem(category: Category, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
+            .clickable { onClick() }
            /* .border(2.dp, Color.Red, RoundedCornerShape(10.dp))*/,
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
