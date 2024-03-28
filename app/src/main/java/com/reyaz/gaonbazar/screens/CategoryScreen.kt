@@ -29,10 +29,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter.State.Empty.painter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
 import com.reyaz.gaonbazar.R
+import com.reyaz.gaonbazar.model.Constant.ITEM
 
 @Composable
 fun CategoryScreen(
@@ -107,7 +112,7 @@ fun getCategories(): LiveData<List<Category>> {
     val categoryReference = firebaseDatabase.getReference("Category")
     val categoriesLiveData = MutableLiveData<List<Category>>()
 
-    categoryReference.addValueEventListener(object : ValueEventListener{
+    categoryReference.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
             val categories = mutableListOf<Category>()
             for (categorySnapshot in snapshot.children){

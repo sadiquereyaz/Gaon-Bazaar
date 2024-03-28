@@ -67,16 +67,16 @@ import com.reyaz.gaonbazar.model.readCategoryItem
 
 
 @Composable
-fun ItemList( id:String?) {
+fun ItemList( name:String?) {
 //   val readItem= readCategoryItem()
 //    Toast.makeText(LocalContext.current, "$readItem", Toast.LENGTH_LONG).show()
     var listItem = emptyList<Item>()
-    getItemsForCategory(id!!).observe(LocalLifecycleOwner.current,{
+    getItemsForCategory(name!!).observe(LocalLifecycleOwner.current,{
         listItem = it;
     })
     
     Column(horizontalAlignment = Alignment.Start) {
-        tabList(id = id)
+        tabList(id = name)
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
             items(listItem){
                 itemViewCard(item = it)
