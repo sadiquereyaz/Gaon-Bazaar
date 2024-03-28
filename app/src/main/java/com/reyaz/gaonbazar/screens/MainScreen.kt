@@ -1,11 +1,15 @@
 package com.reyaz.gaonbazar.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,13 +21,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.model.BottomBarItem
 import com.reyaz.gaonbazar.model.Constant.CATEGORY
 import com.reyaz.gaonbazar.model.Constant.ORDER
@@ -82,16 +90,22 @@ fun BottomBarView(
                     } == true,
                     icon = {
                         if (isSelected) {
-                            Image(
-                                imageVector = bottomBarItem.selectedIcon,
+                            Icon(
+                                painterResource(id = bottomBarItem.selectedIcon),
                                 contentDescription = bottomBarItem.title,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                                tint = MaterialTheme.colorScheme.primary
+//                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
                             )
+//                            Image(
+//                                imageVector = bottomBarItem.selectedIcon,
+//                                contentDescription = bottomBarItem.title,
+//                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+//                            )
                         } else {
-                            Image(
-                                imageVector = bottomBarItem.unSelectedIcon,
+                            Icon(
+                                painterResource(id = bottomBarItem.unSelectedIcon),
                                 contentDescription = bottomBarItem.title,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     },
@@ -108,19 +122,19 @@ fun createBottomBarItems(): List<BottomBarItem> {
     return listOf(
         BottomBarItem(
             title = CATEGORY,
-            selectedIcon = Icons.Filled.Favorite,
-            unSelectedIcon = Icons.Outlined.Favorite
+            selectedIcon = R.drawable.category_filled,
+            unSelectedIcon = R.drawable.category_outlined
         ),
         BottomBarItem(
             title = ORDER,
-            selectedIcon = Icons.Filled.Favorite,
-            unSelectedIcon = Icons.Outlined.Favorite
+            selectedIcon = R.drawable.order_filled,
+            unSelectedIcon = R.drawable.order_outlined
         ),
         BottomBarItem(
             title = SELLER,
-            selectedIcon = Icons.Filled.Favorite,
-            unSelectedIcon = Icons.Default.FavoriteBorder
-        )
+            selectedIcon = R.drawable.shop_fill,
+            unSelectedIcon = R.drawable.shop_out
+        ),
     )
 }
 

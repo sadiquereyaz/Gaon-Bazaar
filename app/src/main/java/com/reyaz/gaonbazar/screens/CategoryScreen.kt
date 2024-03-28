@@ -70,7 +70,7 @@ fun CategoryScreen(
                     text = "Gaon Bazaar",
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp,
+                    fontSize = 24.sp,
                     color = Color(MaterialTheme.colorScheme.onPrimary.toArgb())
                 )
             }
