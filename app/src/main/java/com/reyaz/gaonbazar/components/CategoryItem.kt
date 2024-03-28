@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -28,11 +27,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.reyaz.gaonbazar.model.Category
 
 @Composable
-fun CategoryItem(category: Category, onClick:() -> Unit) {
+fun CategoryItem(category: Category, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.clickable { onClick() }
-            .padding(4.dp)
-            .border(2.dp, Color.Red, RoundedCornerShape(10.dp)),
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { onClick() }
+           /* .border(2.dp, Color.Red, RoundedCornerShape(10.dp))*/,
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
@@ -65,15 +65,15 @@ fun CategoryItem(category: Category, onClick:() -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CategoryItemPreview() {
-    val category = Category(
-        id = "1",
-        name = "Fruits",
-        imageUrl = "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
-    )
-
-    CategoryItem(category = category) {}
-}
-
+//@Preview(showBackground = true)
+//@Composable
+//fun CategoryItemPreview() {
+//    val category = Category(
+//        id = "1",
+//        name = "Fruits",
+//        imageUrl = "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
+//    )
+//
+//    CategoryItem(category = category) {}
+//}
+//
