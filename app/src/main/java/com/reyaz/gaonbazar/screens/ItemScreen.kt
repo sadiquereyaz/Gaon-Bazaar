@@ -1,70 +1,92 @@
 package com.reyaz.gaonbazar.screens
 
-//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
-//import androidx.compose.foundation.layout.FlowColumnScopeInstance.align
-//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
-//import androidx.compose.foundation.layout.FlowRowScopeInstance.align
-
-
 import android.content.Context
+import android.media.Image
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+
+
 import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardElevation
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.VerticalAlignmentLine
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleOwner
+import coil.compose.rememberAsyncImagePainter
+import com.reyaz.gaonbazar.MainActivity
 import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.model.Item
+import com.reyaz.gaonbazar.model.readCategoryItem
 
 
 @Composable
-fun ItemList(
-    name: String?
-) {
-//    Toast.makeText(LocalContext.current, name, Toast.LENGTH_SHORT).show()
-
+fun ItemList( id:String?) {
+//   val readItem= readCategoryItem()
+//    Toast.makeText(LocalContext.current, "$readItem", Toast.LENGTH_LONG).show()
     var listItem = emptyList<Item>()
-    getItemsForCategory(name!!).observe(LocalLifecycleOwner.current, {
+    getItemsForCategory(id!!).observe(LocalLifecycleOwner.current,{
         listItem = it;
     })
-    Column {
-        Text(text = "Category: ${name}")
-    }
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-        items(listItem) {
-            itemViewCard(item = it)
+    
+    Column(horizontalAlignment = Alignment.Start) {
+        tabList(id = id)
+        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+            items(listItem){
+                itemViewCard(item = it)
+
+            }
 
         }
 
     }
+
 
 
 }
@@ -72,6 +94,7 @@ fun ItemList(
 
 @Composable
 fun itemViewCard(item: Item) {
+
 
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -111,10 +134,8 @@ fun itemViewCard(item: Item) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Spacer(modifier = Modifier.width(16.dp))
 
-                Column(
-                    modifier = Modifier.padding(3.dp),
-                    verticalArrangement = Arrangement.SpaceAround
-                ) {
+                Column(modifier = Modifier.padding(3.dp),
+                    verticalArrangement = Arrangement.SpaceAround) {
                     Text(
                         text = item.price.toString(),
                         modifier = Modifier
@@ -123,10 +144,9 @@ fun itemViewCard(item: Item) {
                         color = Color.Black,
                     )
 
-                    Box(
+                    Box(contentAlignment = Alignment.BottomEnd,
                         modifier = Modifier
-                            .align(Alignment.Start)
-                            .fillMaxWidth()
+                            .fillMaxWidth(0.4f)
 
 
                     ) {
@@ -140,59 +160,81 @@ fun itemViewCard(item: Item) {
         }
     }
 }
-
 @Composable
 fun addButton() {
     val isAdd = remember { mutableStateOf(false) }
     var counter = remember { mutableStateOf(0) }
 
     if (!isAdd.value) {
-        Button(
-            onClick = {
-                isAdd.value = true
-                counter.value = 1
-            },
-            modifier = Modifier.size(100.dp, 40.dp)
-        ) {
-            Text(text = "ADD", fontSize = 15.sp)
-        }
+        Text(text = "ADD",
+            modifier = Modifier
+                .clickable {
+                    isAdd.value = true
+                    counter.value = 1
+
+                }
+                .fillMaxSize(1f))
     } else {
-        if (counter.value != 0) {
+        if(counter.value != 0){
             Row(
                 verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .background(Color.DarkGray)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Absolute.Right
             ) {
-                Button(
-                    onClick = { counter.value-- },
-                    modifier = Modifier.size(30.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        modifier = Modifier.size(15.dp),
-                        contentDescription = "decrement"
-                    )
-                }
+                Text(text = "-",
+                    fontSize = 20.sp,
+                    modifier = Modifier.clickable { counter.value--; })
                 Text(
                     text = "${counter.value}",
-                    modifier = Modifier.size(20.dp),
-                    fontSize = 15.sp
+                    fontSize = 20.sp
                 )
-                Button(
-                    onClick = { counter.value++ },
-                    modifier = Modifier.size(30.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        modifier = Modifier.size(15.dp),
-                        contentDescription = "increment"
-                    )
-                }
+                Text(text = "+",
+                    fontSize = 20.sp,
+                    modifier = Modifier.clickable { counter.value++; })
             }
-        } else {
+        }else{
             isAdd.value = false
+        }
+    }
+}
 
+@Composable
+fun tabList(id: String?) {
+    val tabItems = remember { mutableStateListOf<Item>() }
 
+    getItemsForCategory(id!!).observe(LocalLifecycleOwner.current) { items ->
+        tabItems.clear()
+        tabItems.addAll(items)
+    }
+
+    LazyRow(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items(tabItems) { item ->
+            tabCard(item)
+        }
+    }
+}
+
+@Composable
+fun tabCard(tabItem: Item) {
+    Card(
+        modifier = Modifier
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clip(RoundedCornerShape(4.dp))
+    ) {
+        Box(
+            modifier = Modifier
+                .background(Color.Gray)
+                .padding(16.dp)
+        ) {
+            Text(
+                text = tabItem.name,
+                color = Color.White,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold)
         }
     }
 }

@@ -21,20 +21,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.reyaz.gaonbazar.R
+import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
-import com.reyaz.gaonbazar.model.Constant.ITEM
 import com.reyaz.gaonbazar.model.Item
+import com.reyaz.gaonbazar.R
 
 @Composable
 fun CategoryScreen(
@@ -74,15 +72,15 @@ fun CategoryScreen(
         }
 
 
-        Text(
-            text = "Categories",
-            modifier = Modifier
-                .padding(top = 24.dp)
-                .fillMaxWidth(),
-            fontSize = 24.sp,
-            textAlign = TextAlign.Center
+         Text(
+             text = "Categories",
+             modifier = Modifier
+                 .padding(top = 24.dp)
+                 .fillMaxWidth(),
+             fontSize = 24.sp,
+             textAlign = TextAlign.Center
 
-        )
+         )
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
