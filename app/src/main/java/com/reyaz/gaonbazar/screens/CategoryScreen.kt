@@ -118,9 +118,9 @@ fun getCategories(): LiveData<List<Category>> {
             for (categorySnapshot in snapshot.children){
 
                 val name = categorySnapshot.key?:""
-                val id = categorySnapshot.child("id").getValue(Int::class.java)?:0
+//                val id = categorySnapshot.child("id").getValue(Int::class.java)?:0
                 val imageUrl = categorySnapshot.child("imageUrl").getValue(String::class.java)?: ""
-                val category = Category(id, name, imageUrl)
+                val category = Category(name, imageUrl)
 
                 categories.add(category)
             }
