@@ -1,8 +1,6 @@
 package com.reyaz.gaonbazar.screens
 
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,8 +33,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
@@ -104,26 +99,30 @@ fun CategoryScreen(
     }
 }
 
-//@Composable
-//fun ItemList(categoryId: String) {
-//    val items by getItemsForCategory(categoryId).observeAsState(initial = emptyList())
-//
-//    // Display items in a list or grid
-//}
 @Composable
+fun ItemList(categoryId: String) {
+    val items by getItemsForCategory(categoryId).observeAsState(initial = emptyList())
+
+    // Display items in a list or grid
+}
+
 fun getCategories(): LiveData<List<Category>> {
     // Fetch categories from Firebase Firestore and return as LiveData
     val firebaseDatabase = FirebaseDatabase.getInstance()
     val categoryReference = firebaseDatabase.getReference("Category")
     val categoriesLiveData = MutableLiveData<List<Category>>()
-    val categories = mutableListOf<Category>()
- categoryReference.addValueEventListener(object : ValueEventListener {
+
+    categoryReference.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-
+            val categories = mutableListOf<Category>()
             for (categorySnapshot in snapshot.children){
-                val category = categorySnapshot.child(categorySnapshot.key!!).getValue(Category::class.java)
 
-                categories.add(category!!)
+                val name = categorySnapshot.key?:""
+//                val id = categorySnapshot.child("id").getValue(Int::class.java)?:0
+                val imageUrl = categorySnapshot.child("imageUrl").getValue(String::class.java)?: ""
+                val category = Category(name, imageUrl)
+
+                categories.add(category)
             }
             categoriesLiveData.value = categories
         }
