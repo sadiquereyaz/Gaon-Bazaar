@@ -35,7 +35,7 @@ fun writeCategory(){
     )
     database = Firebase.database.reference
     for (category in categories){
-        database.child("Category").child("list").setValue(category)
+        database.child("Category").push().setValue(category)
     }
     Toast.makeText(LocalContext.current, "${categories.size}", Toast.LENGTH_SHORT).show()
 }

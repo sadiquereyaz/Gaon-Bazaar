@@ -113,15 +113,15 @@ fun CategoryScreen(
 @Composable
 fun getCategories(): LiveData<List<Category>> {
     // Fetch categories from Firebase Firestore and return as LiveData
-//    val firebaseDatabase = FirebaseDatabase.getInstance()
-//    val categoryReference = firebaseDatabase.getReference("Category")
+    val firebaseDatabase = FirebaseDatabase.getInstance()
+    val categoryReference = firebaseDatabase.getReference("Category")
     val categoriesLiveData = MutableLiveData<List<Category>>()
     val categories = mutableListOf<Category>()
- Firebase.database.reference.child("Category").child("list").addValueEventListener(object : ValueEventListener {
+ categoryReference.addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
 
             for (categorySnapshot in snapshot.children){
-                val category = categorySnapshot.getValue(Category::class.java)
+                val category = categorySnapshot.child(categorySnapshot.key!!).getValue(Category::class.java)
 
                 categories.add(category!!)
             }
@@ -132,7 +132,7 @@ fun getCategories(): LiveData<List<Category>> {
             Log.e("TAG", "onCancelled: $error", )
         }
     })
-    Toast.makeText(LocalContext.current, "${categories.size}", Toast.LENGTH_LONG).show()
+    Toast.makeText(LocalContext.current, "${categoriesLiveData.value}", Toast.LENGTH_LONG).show()
     return categoriesLiveData
 }
 
