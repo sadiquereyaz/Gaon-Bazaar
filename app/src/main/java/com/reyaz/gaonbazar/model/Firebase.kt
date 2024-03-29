@@ -14,12 +14,30 @@ import com.google.firebase.ktx.Firebase
 
 private lateinit var database: DatabaseReference
 private lateinit var category:ValueEventListener
-fun writeCategory(categories:List<Category>){
+@Composable
+fun writeCategory(){
+    val categories = listOf(
+        Category(
+
+            "Fruits",
+            "https://i.ytimg.com/vi/a7zhK5yCI0Y/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB0dHONrAHWv7hZuhwlzcq-Y9SJtg"
+        ),
+        Category(
+
+            "Vegetables",
+            "https://i.ytimg.com/vi/xoOecJZ2Q-0/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLACQeTcHm87pM_okEDBQEXrLp7WDw"
+        ),
+        Category(
+
+            "Dairy",
+            "https://i.ytimg.com/vi/ktOWiLx83bQ/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAEke-Q-UD1CAp8hwO-8rY_32bMXw"
+        )
+    )
     database = Firebase.database.reference
     for (category in categories){
-        database.push().setValue(category)
+        database.child("Category").child("list").setValue(category)
     }
-
+    Toast.makeText(LocalContext.current, "${categories.size}", Toast.LENGTH_SHORT).show()
 }
 fun readCategoryItem(callback: (List<Category>) -> Unit) {
     database = Firebase.database.getReference("Category")

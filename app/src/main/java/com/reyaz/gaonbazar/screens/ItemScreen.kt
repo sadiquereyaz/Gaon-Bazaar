@@ -59,9 +59,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
 import coil.compose.rememberAsyncImagePainter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.reyaz.gaonbazar.MainActivity
 import com.reyaz.gaonbazar.R
+import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
 import com.reyaz.gaonbazar.model.readCategoryItem
 
@@ -71,12 +77,12 @@ fun ItemList( name:String?) {
 //   val readItem= readCategoryItem()
 //    Toast.makeText(LocalContext.current, "$readItem", Toast.LENGTH_LONG).show()
     var listItem = emptyList<Item>()
-    getItemsForCategory(name!!).observe(LocalLifecycleOwner.current,{
+    GetItemsByCategory(name!!).observe(LocalLifecycleOwner.current,{
         listItem = it;
     })
-    
+    Toast.makeText(LocalContext.current, "${listItem.size}", Toast.LENGTH_SHORT).show()
     Column(horizontalAlignment = Alignment.Start) {
-        tabList(id = name)
+//        tabList(name = name)
         LazyVerticalGrid(columns = GridCells.Fixed(2)) {
             items(listItem){
                 itemViewCard(item = it)
@@ -201,10 +207,10 @@ fun addButton() {
 }
 
 @Composable
-fun tabList(id: String?) {
+fun tabList(name: String?) {
     val tabItems = remember { mutableStateListOf<Item>() }
 
-    getItemsForCategory(id!!).observe(LocalLifecycleOwner.current) { items ->
+    GetItemsByCategory(name!!).observe(LocalLifecycleOwner.current) { items ->
         tabItems.clear()
         tabItems.addAll(items)
     }
@@ -237,4 +243,33 @@ fun tabCard(tabItem: Item) {
                 fontWeight = FontWeight.Bold)
         }
     }
+}
+
+@Composable
+fun GetItemsByCategory(name:String): MutableLiveData<List<Item>> {
+    val firebaseDatabase = FirebaseDatabase.getInstance()
+    val categoryReference = firebaseDatabase.getReference("Category")
+    val itemLiveData = MutableLiveData<List<Item>>()
+
+    categoryReference.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val categories = mutableListOf<Item>()
+            for (categorySnapshot in snapshot.children){
+
+                val name = categorySnapshot.key!!
+                val imageUrl = categorySnapshot.child("imageUrl").getValue(String::class.java)?: ""
+                val item = Item( name, 1,imageUrl)
+
+                categories.add(item)
+            }
+            itemLiveData.value = categories
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            TODO("Not yet implemented")
+        }
+    })
+    Toast.makeText(LocalContext.current, "{$itemLiveData}", Toast.LENGTH_SHORT).show()
+    return itemLiveData
+
 }

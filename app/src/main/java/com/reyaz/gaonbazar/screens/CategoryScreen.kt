@@ -1,6 +1,8 @@
 package com.reyaz.gaonbazar.screens
 
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +36,8 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.reyaz.gaonbazar.components.CategoryItem
 import com.reyaz.gaonbazar.model.Category
 import com.reyaz.gaonbazar.model.Item
@@ -99,66 +104,63 @@ fun CategoryScreen(
     }
 }
 
+//@Composable
+//fun ItemList(categoryId: String) {
+//    val items by getItemsForCategory(categoryId).observeAsState(initial = emptyList())
+//
+//    // Display items in a list or grid
+//}
 @Composable
-fun ItemList(categoryId: String) {
-    val items by getItemsForCategory(categoryId).observeAsState(initial = emptyList())
-
-    // Display items in a list or grid
-}
-
 fun getCategories(): LiveData<List<Category>> {
     // Fetch categories from Firebase Firestore and return as LiveData
-    val firebaseDatabase = FirebaseDatabase.getInstance()
-    val categoryReference = firebaseDatabase.getReference("Category")
+//    val firebaseDatabase = FirebaseDatabase.getInstance()
+//    val categoryReference = firebaseDatabase.getReference("Category")
     val categoriesLiveData = MutableLiveData<List<Category>>()
-
-    categoryReference.addValueEventListener(object : ValueEventListener {
+    val categories = mutableListOf<Category>()
+ Firebase.database.reference.child("Category").child("list").addValueEventListener(object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            val categories = mutableListOf<Category>()
+
             for (categorySnapshot in snapshot.children){
+                val category = categorySnapshot.getValue(Category::class.java)
 
-                val name = categorySnapshot.key?:""
-                val id = categorySnapshot.child("id").getValue(Int::class.java)?:0
-                val imageUrl = categorySnapshot.child("imageUrl").getValue(String::class.java)?: ""
-                val category = Category(id, name, imageUrl)
-
-                categories.add(category)
+                categories.add(category!!)
             }
             categoriesLiveData.value = categories
         }
 
         override fun onCancelled(error: DatabaseError) {
-            TODO("Not yet implemented")
+            Log.e("TAG", "onCancelled: $error", )
         }
     })
+    Toast.makeText(LocalContext.current, "${categories.size}", Toast.LENGTH_LONG).show()
     return categoriesLiveData
 }
 
-fun getItemsForCategory(categoryId: String): LiveData<List<Item>> {
-    // Fetch items for the given category from Firebase Firestore and return as LiveData
-    val dummyItemList = when (categoryId) {
-        "1" -> listOf(
-            Item("101", "Apple", 1.99),
-            Item("102", "Banana", 0.99),
-            Item("103", "Orange", 2.49)
-        )
-
-        "2" -> listOf(
-            Item("201", "Carrot", 0.79),
-            Item("202", "Broccoli", 1.49),
-            Item("203", "Tomato", 0.69)
-        )
-
-        "3" -> listOf(
-            Item("301", "Milk", 2.99),
-            Item("302", "Cheese", 3.49),
-            Item("303", "Yogurt", 1.99)
-        )
-
-        else -> emptyList()
-    }
-    return MutableLiveData(dummyItemList)
-}
+//fun getItemsForCategory(categoryId: String): LiveData<List<Item>> {
+//    // Fetch items for the given category from Firebase Firestore and return as LiveData
+//    val dummyItemList = when (categoryId) {
+//        "1" -> listOf(
+//            Item("101", "Apple", 1.99),
+//            Item("102", "Banana", 0.99),
+//            Item("103", "Orange", 2.49)
+//        )
+//
+//        "2" -> listOf(
+//            Item("201", "Carrot", 0.79),
+//            Item("202", "Broccoli", 1.49),
+//            Item("203", "Tomato", 0.69)
+//        )
+//
+//        "3" -> listOf(
+//            Item("301", "Milk", 2.99),
+//            Item("302", "Cheese", 3.49),
+//            Item("303", "Yogurt", 1.99)
+//        )
+//
+//        else -> emptyList()
+//    }
+//    return MutableLiveData(dummyItemList)
+//}
 
 //@Preview(showSystemUi = true)
 //@Composable

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.firebase.database.DatabaseReference
+import com.reyaz.gaonbazar.model.writeCategory
 import com.reyaz.gaonbazar.navigation.SetupNavigation
 import com.reyaz.gaonbazar.ui.theme.GaonBazarTheme
 
@@ -25,6 +26,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    writeCategory()
                     SetupNavigation()
                 }
             }
