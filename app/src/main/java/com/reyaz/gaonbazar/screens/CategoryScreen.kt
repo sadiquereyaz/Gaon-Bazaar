@@ -21,21 +21,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.reyaz.gaonbazar.components.CategoryItem
-import com.reyaz.gaonbazar.model.Category
-import com.reyaz.gaonbazar.model.Item
+import com.reyaz.gaonbazar.model.table.Category
 import com.reyaz.gaonbazar.R
 import com.reyaz.gaonbazar.model.Constant.ITEM
 
@@ -70,7 +66,7 @@ fun CategoryScreen(
                     text = "Gaon Bazaar",
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp,
+                    fontSize = 24.sp,
                     color = Color(MaterialTheme.colorScheme.onPrimary.toArgb())
                 )
             }
@@ -99,17 +95,17 @@ fun CategoryScreen(
     }
 }
 
-@Composable
-fun ItemList(categoryId: String) {
-    val items by getItemsForCategory(categoryId).observeAsState(initial = emptyList())
-
-    // Display items in a list or grid
-}
+//@Composable
+//fun ItemList(categoryId: String) {
+//    val items by getItemsForCategory(categoryId).observeAsState(initial = emptyList())
+//
+//    // Display items in a list or grid
+//}
 
 fun getCategories(): LiveData<List<Category>> {
     // Fetch categories from Firebase Firestore and return as LiveData
     val firebaseDatabase = FirebaseDatabase.getInstance()
-    val categoryReference = firebaseDatabase.getReference("Category")
+    val categoryReference = firebaseDatabase.getReference("categories")
     val categoriesLiveData = MutableLiveData<List<Category>>()
 
     categoryReference.addValueEventListener(object : ValueEventListener {
@@ -128,10 +124,9 @@ fun getCategories(): LiveData<List<Category>> {
         }
 
         override fun onCancelled(error: DatabaseError) {
-            Log.e("TAG", "onCancelled: $error", )
+            TODO("Not yet implemented")
         }
     })
-    Toast.makeText(LocalContext.current, "${categoriesLiveData.value}", Toast.LENGTH_LONG).show()
     return categoriesLiveData
 }
 

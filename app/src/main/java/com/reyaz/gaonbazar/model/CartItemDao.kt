@@ -3,6 +3,7 @@ package com.reyaz.gaonbazar.model
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.reyaz.gaonbazar.model.table.CartItem
 import kotlinx.coroutines.flow.Flow
 import okhttp3.Challenge
 
